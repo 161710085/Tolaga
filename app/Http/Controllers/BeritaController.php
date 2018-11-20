@@ -4,17 +4,22 @@ namespace App\Http\Controllers;
 
 use App\berita;
 use Illuminate\Http\Request;
-
+use Session;
 class BeritaController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     */public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
-        //
+           $berita = berita::all();
+        return view('berita.index',compact('berita'));
+   
     }
 
     /**
@@ -24,7 +29,7 @@ class BeritaController extends Controller
      */
     public function create()
     {
-        //
+        return view('berita.create');
     }
 
     /**
@@ -35,7 +40,31 @@ class BeritaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'judul' => 'required|',
+            'isi' => 'required|',
+            'foto' => 'required|',
+            'slug' => 'required|',                
+            ]);
+        $berita = new berita;
+        $berita->judul = $request->judul;
+        $berita->isi = $request->isi;
+        $berita->slug = $request->slug;
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $destinationPath = public_path().'/assets/img/berita/';
+            $filename = str_random(6).'_'.$file->getClientOriginalName();
+            $uploadSuccess = $file->move($destinationPath, $filename);
+            $berita->foto = $filename;
+     }
+       
+          $berita->save();
+        Session::flash("flash_notification", [
+        "level"=>"success",
+        "message"=>"Berhasil menyimpan <b>$berita->berita</b>"
+        ]);
+        return redirect()->route('berita.index');
     }
 
     /**
@@ -46,7 +75,8 @@ class BeritaController extends Controller
      */
     public function show(berita $berita)
     {
-        //
+        $berita = berita::findOrFail($id);
+        return view('berita.show',compact('berita'));
     }
 
     /**
@@ -57,7 +87,9 @@ class BeritaController extends Controller
      */
     public function edit(berita $berita)
     {
-        //
+        $berita = berita::findOrFail($id);
+
+        return view('berita.edit',compact('berita'));
     }
 
     /**
@@ -69,9 +101,46 @@ class BeritaController extends Controller
      */
     public function update(Request $request, berita $berita)
     {
-        //
-    }
+        
+        $this->validate($request,[
+            'judul' => 'required|',
+        'isi' => 'required|',
+        'foto' => 'required|',
+        'slug' => 'required|',
+]);
 
+$berita = berita::findOrFail($id);
+$berita->judul = $request->judul;
+$berita->isi = $request->isi;
+            $berita->slug = $request->slug;
+            if ($request->hasFile('foto')) {
+                $file = $request->file('foto');
+                $destinationPath = public_path().'/assets/img/berita/';
+                $filename = str_random(6).'_'.$file->getClientOriginalName();
+                $uploadSuccess = $file->move($destinationPath, $filename);
+        
+            // hapus foto lama, jika ada
+            if ($berita->foto) {
+            $old_foto = $berita->foto;
+            $filepath = public_path() . DIRECTORY_SEPARATOR . '/assets/img/berita'
+            . DIRECTORY_SEPARATOR . $berita->foto;
+                try {
+                File::delete($filepath);
+                } catch (FileNotFoundException $e) {
+            // File sudah dihapus/tidak ada
+                }
+            }
+            $berita->foto = $filename;
+    }
+    
+            $berita->save();
+           Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"Berhasil mengedit <b>$berita->nama</b>"
+            ]);
+            return redirect()->route('berita.index');
+        }
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -80,6 +149,22 @@ class BeritaController extends Controller
      */
     public function destroy(berita $berita)
     {
-        //
+        $berita = berita::findOrFail($berita->id);
+        if ($berita->foto) {
+            $old_foto = $berita->foto;
+            $filepath = public_path() . DIRECTORY_SEPARATOR . 'assets/img/berita/'
+            . DIRECTORY_SEPARATOR . $berita->foto;
+            try {
+            File::delete($filepath);
+            } catch (FileNotFoundException $e) {
+            // File sudah dihapus/tidak ada
+            }
+            }
+        $berita->delete();
+        Session::flash("flash_notification", [
+        "level"=>"success",
+        "message"=>"Data Berhasil dihapus"
+        ]);
+        return redirect()->route('berita.index');
     }
 }

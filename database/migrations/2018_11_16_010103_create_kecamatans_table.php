@@ -16,12 +16,16 @@ class CreateKecamatansTable extends Migration
         Schema::create('kecamatans', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nama');
+            $table->unsignedInteger('id_kota');
+			$table->foreign('id_kota')
+				->references('id')->on('kotas')
+				->onDelete('cascade');
             $table->timestamps();
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations.php
      *
      * @return void
      */

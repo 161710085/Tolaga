@@ -5,8 +5,9 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary
 			">
-			  <div class="panel-heading"><b>Data merk</b>
-			  	<div class="panel-title pull-right"><a href="{{ route('merk.create') }}">Tambah</a>
+			<font color="white">
+			  <div class="panel-heading"><b>Data Merk</b></font>
+			  	<div class="btn btn-primary pull-right"><a href="{{ route('merk.create') }}">Tambah</a>
 			  	</div>
 			  </div>
 			  <div class="panel-body">

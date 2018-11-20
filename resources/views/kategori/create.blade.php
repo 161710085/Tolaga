@@ -3,8 +3,8 @@
 <div class="row">
 	<div class="container">
 		<div class="col-md-12">
-			<div class="panel panel-primary">
-			  <div class="panel-heading">Tambah kategori 
+			<div class="panel panel-primary"><font color="white">
+			  <div class="panel-heading">Tambah Kategori </font><br><br>
 			  	<div class="panel-title pull-right"><a href="{{ url()->previous() }}">Kembali</a>
 			  	</div>
 			  </div>

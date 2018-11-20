@@ -17,6 +17,7 @@ Route::get('/', function () {
     Route::resource('jenis','JenisController');
     Route::resource('merk','MerkController');
     Route::resource('kategori','KategoriController');
+    Route::resource('berita','BeritaController');
 
 
 Auth::routes();
