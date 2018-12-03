@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class merk extends Model
 {
     protected $table = 'merks';
-    protected $fillable = ['name'];
+    protected $fillable = ['nama'];
     public $timestamps = true;
 
     public function barang()

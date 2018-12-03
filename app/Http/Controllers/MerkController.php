@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\merk;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Html\Builder;
+use Yajra\Datatables\DataTables;
 use Session;
 class MerkController extends Controller
 {
@@ -15,10 +17,27 @@ class MerkController extends Controller
     {
         $this->middleware('auth');
     }
-    public function index()
+    public function index(Request $request, Builder $builder)
     {
-           $merk = merk::all();
-        return view('merk.index',compact('merk'));
+        if ($request->ajax()) {
+            $merk = merk::all();
+             return Datatables::of($merk)
+                     ->addColumn('action', function ($merk) {  
+                         return view('datatable._action', [
+                         'model'=> $merk,
+                         'form_url'=> route('merk.destroy', $merk->id),
+                         'edit_url' => route('merk.edit',$merk->id),
+                         'confirm_message' => 'Yakin mau menghapus ' .$merk->nama . '?'
+         
+                     ]);
+                     })->make(true);
+         }
+         $html = $builder
+             ->addColumn(['data' => 'nama', 'name'=>'nama','title'=>'Nama Merk'])
+         
+             ->addColumn(['data' => 'action', 'name'=>'action', 'title'=>'', 'orderable'=>false,
+                          'searchable'=>false]);
+         return view('merk.index', compact('html'));
    
     }
 

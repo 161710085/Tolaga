@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\foto_barang;
+use App\barang;
 use Illuminate\Http\Request;
-
+use File;
 class FotoBarangController extends Controller
 {
     /**
@@ -14,7 +15,9 @@ class FotoBarangController extends Controller
      */
     public function index()
     {
-        //
+        $foto_barang = foto_barang::all();
+        // dd($foto_barang);
+        return view('foto_barang.index',compact('foto_barang'));
     }
 
     /**
@@ -24,7 +27,8 @@ class FotoBarangController extends Controller
      */
     public function create()
     {
-        //
+        $barang = barang::all();
+        return view('foto_barang.create',compact('barang'));
     }
 
     /**
@@ -35,8 +39,21 @@ class FotoBarangController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->hasFile('foto')) {
+            foreach($request->foto as $foto) {
+                $filename = $foto->getClientOriginalName();
+                $destinationPath = public_path() . DIRECTORY_SEPARATOR . '/assets/img/';
+                $foto->move($destinationPath, $filename);
+                $foto_barang = foto_barang::create($request->except('foto')); 
+                $foto_barang->foto = $filename;
+                $foto_barang->save();
+            }
+            }
+        return redirect()->route('fotbar.index');
     }
+
+
+    
 
     /**
      * Display the specified resource.
@@ -44,9 +61,9 @@ class FotoBarangController extends Controller
      * @param  \App\foto_barang  $foto_barang
      * @return \Illuminate\Http\Response
      */
-    public function show(foto_barang $foto_barang)
+    public function show($id)
     {
-        //
+
     }
 
     /**
@@ -55,9 +72,12 @@ class FotoBarangController extends Controller
      * @param  \App\foto_barang  $foto_barang
      * @return \Illuminate\Http\Response
      */
-    public function edit(foto_barang $foto_barang)
+    public function edit($id)
     {
-        //
+        $foto_barang = foto_barang::findOrFail($id);
+        $barang = barang::all();
+        return view('foto_barang.edit',compact('foto_barang','barang'));
+
     }
 
     /**
@@ -67,9 +87,36 @@ class FotoBarangController extends Controller
      * @param  \App\foto_barang  $foto_barang
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, foto_barang $foto_barang)
+    public function update(Request $request, $id)
     {
-        //
+        $foto_barang = foto_barang::findOrFail($id);
+        $foto_barang->id_barang = $request->id_barang;
+        // edit upload foto       
+        if ($request->hasFile('foto')) {
+                    $file = $request->file('foto');
+                    $destinationPath = public_path().'/assets/img/';
+                    $filename = str_random(6).'_'.$file->getClientOriginalName();
+                    $uploadSuccess = $file->move($destinationPath, $filename);
+            
+                // hapus foto lama, jika ada
+                if ($foto_barang->foto) {
+                $old_foto = $foto_barang->foto;
+                $filepath = public_path() . DIRECTORY_SEPARATOR . '/assets/img/'
+                . DIRECTORY_SEPARATOR . $foto_barang->foto;
+                    try {
+                    File::delete($filepath);
+                    } catch (FileNotFoundException $e) {
+                // File sudah dihapus/tidak ada
+                    } 
+                   
+                }
+                $foto_barang->foto = $filename;
+
+            }
+
+        $foto_barang->save();
+        return redirect()->route('fotbar.index');
+    
     }
 
     /**
@@ -78,8 +125,21 @@ class FotoBarangController extends Controller
      * @param  \App\foto_barang  $foto_barang
      * @return \Illuminate\Http\Response
      */
-    public function destroy(foto_barang $foto_barang)
+    public function destroy($id)
     {
-        //
+        $foto_barang = foto_barang::findOrFail($id);
+        if ($foto_barang->foto) {
+            $old_foto = $foto_barang->foto;
+            $filepath = public_path() . DIRECTORY_SEPARATOR . 'assets/img/'
+            . DIRECTORY_SEPARATOR . $foto_barang->foto;
+            try {
+            File::delete($filepath);
+            } catch (FileNotFoundException $e) {
+            // File sudah dihapus/tidak ada
+            }
+            }
+        
+        $foto_barang->delete();
+        return redirect()->route('fotbar.index');
     }
 }

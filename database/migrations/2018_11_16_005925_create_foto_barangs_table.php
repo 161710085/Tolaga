@@ -15,7 +15,7 @@ class CreateFotoBarangsTable extends Migration
     {
         Schema::create('foto_barangs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('foto');
+            $table->string('foto')->nullable();
             $table->unsignedInteger('id_barang');
             $table->foreign('id_barang')->references('id')
             ->on('barangs')->onUpdate('cascade')->onDelete('cascade');      

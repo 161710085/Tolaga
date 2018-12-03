@@ -18,10 +18,10 @@
 			  		<tr>
 			  		  <th>No</th>	
 					  <th>Judul </th>
-					  <th>Isi</th>
-					  <th>Slug</th>
+					  <th>Isi Berita</th>
+					  <!-- <th>Slug</th> -->
 	
-					  <th>Foto</th>
+					  <!-- <th>Foto</th> -->
 					  <th colspan="2">Action</th>
 			  		</tr>
 				  	</thead>
@@ -33,8 +33,8 @@
 				    	<td>{{ $no++ }}</td>
 				    	<td>{{ $data->judul }}</td>
 				    	<td><p>{{ $data->isi }}</p></td>
-				    	<td>{{ $data->slug }}</td>
-				    	<td><img src="{{asset('assets/img/berita/'.$data->foto)}}" style="max-height: 125px ; max-width: 125px;margin-top: 7px;"></td>
+				    	<!-- <td>{{ $data->slug }}</td> -->
+				    	<!-- <td><img src="{{asset('assets/img/berita/'.$data->foto)}}" style="max-height: 125px ; max-width: 125px;margin-top: 7px;"></td> -->
 				    	
 				    	
 						<td>

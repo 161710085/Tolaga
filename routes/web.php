@@ -18,6 +18,8 @@ Route::get('/', function () {
     Route::resource('merk','MerkController');
     Route::resource('kategori','KategoriController');
     Route::resource('berita','BeritaController');
+    Route::resource('barang','BarangController');
+    Route::resource('fotbar','FotoBarangController');
 
 
 Auth::routes();

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class barang extends Model
 {
     protected $table ='barangs';
-    protected $fillable = ['nama','id_kategori','id_merk','id_jenis','deskripsi','size','harga','slug'];
+    protected $fillable = ['nama','id_kategori','id_merk','id_jenis','deskripsi','size','harga','stok','slug'];
      public $timestamps=true;
     public function kategori()
     {
@@ -32,5 +32,9 @@ class barang extends Model
     public function oreder_status()
     {
         return $this->hasMany('App\oreder_status','id_oreder_status');
+    }
+    public function getRouteKeyName()
+    {
+return 'slug';
     }
 }

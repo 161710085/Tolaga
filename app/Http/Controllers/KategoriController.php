@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\kategori;
+use Yajra\DataTables\Html\Builder;
+use Yajra\Datatables\DataTables;
 use Illuminate\Http\Request;
 use Session;
 class KategoriController extends Controller
@@ -15,11 +17,27 @@ class KategoriController extends Controller
     {
         $this->middleware('auth');
     }
-    public function index()
-    {
-           $kategori = kategori::all();
-        return view('kategori.index',compact('kategori'));
-   
+    public function index(Request $request, Builder $builder)
+    { 
+        if ($request->ajax()) {
+       $kategori = kategori::all();
+        return Datatables::of($kategori)
+                ->addColumn('action', function ($kategori) {  
+                    return view('datatable._action', [
+                    'model'=> $kategori,
+                    'form_url'=> route('kategori.destroy', $kategori->id),
+                    'edit_url' => route('kategori.edit',$kategori->id),
+                    'confirm_message' => 'Yakin mau menghapus ' .$kategori->name . '?'
+    
+                ]);
+                })->make(true);
+    }
+    $html = $builder
+        ->addColumn(['data' => 'nama', 'name'=>'nama','title'=>'Kategori Barang'])
+    
+        ->addColumn(['data' => 'action', 'name'=>'action', 'title'=>'', 'orderable'=>false,
+                     'searchable'=>false]);
+    return view('kategori.index', compact('html'));
     }
 
     /**
