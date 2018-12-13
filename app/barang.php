@@ -13,6 +13,7 @@ class barang extends Model
     {
         return $this->belongsTo('App\kategori','id_kategori');
     }
+    
     public function merk()
     {
         return $this->belongsTo('App\merk','id_merk');
@@ -23,7 +24,7 @@ class barang extends Model
     }
     public function foto_barang()
     {
-        return $this->hasMany('App\foto_barang','id_foto_barang');
+        return $this->hasMany('App\foto_barang','id_barang');
     }
     public function cart()
     {

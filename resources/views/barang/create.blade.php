@@ -25,7 +25,7 @@
           </h2>
           <div class="modal-footer">
           </div>
-          <form action="{{ route('jenis.store') }}" class="form" method="post" enctype="multipart/form-data">
+          <form action="{{ route('barang.store') }}" class="form" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class="form-group {{ $errors->has('a') ? ' has-error' : '' }}">
               <div class="form-group">

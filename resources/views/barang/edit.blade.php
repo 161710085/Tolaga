@@ -1,88 +1,119 @@
 @extends('layouts.admin')
 @section('content')
-<div class="row">
-	<div class="container">
-		<div class="col-md-12">
-			<div class="panel panel-primary">
-			  <div class="panel-heading">Edit Data barang 
-			  	<div class="panel-title pull-right"><a href="{{ url()->previous() }}">Kembali</a>
-			  	</div>
-			  </div>
-			  <div class="panel-body">
-			  	<form action="{{ route('barang.update',$barang->id) }}" method="post" >
-			  		<input name="_method" type="hidden" value="PATCH">
-        			{{ csrf_field() }}
-			  		<div class="form-group {{ $errors->has('nama') ? ' has-error' : '' }}">
-			  			<label class="control-label">Nama barang</label>	
-			  			<input type="text" name="nama" class="form-control" value="{{ $barang->nama }}"  required>
-			  			@if ($errors->has('nama'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('nama') }}</strong>
-                            </span>
-                        @endif
-                        <div class="form-group">
-                                <label for="cc-payment" class="control-label mb-1">kategori</label>
-                                <select class="form-control" name="id_kategori" required>
-                                    @foreach($kategori as $data)
-                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach()
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="cc-payment" class="control-label mb-1">merk</label>
-                                <select class="form-control" name="id_merk" required>
-                                    @foreach($merk as $data)
-                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach()
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="cc-payment" class="control-label mb-1">jenis</label>
-                                <select class="form-control" name="id_jenis" required>
-                                    @foreach($jenis as $data)
-                                    <option value="{{ $data->id }}">{{ $data->nama }}</option>
-                                    @endforeach()
-                                </select>
-                            </div>
-                            <div class="form-group {{ $errors->has('deskripsi') ? ' has-error' : '' }}">
-			  			<label class="control-label">deskripsi </label>	
-			  			<input type="text" name="deskripsi" class="form-control" value="{{ $barang->deskripsi }}"  required>
-			  			@if ($errors->has('deskripsi'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('deskripsi') }}</strong>
-                            </span>
-                        @endif
-                        <div class="form-group {{ $errors->has('size') ? ' has-error' : '' }}">
-			  			<label class="control-label">size barang</label>	
-			  			<input type="text" name="size" class="form-control" value="{{ $barang->size }}"  required>
-			  			@if ($errors->has('size'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('size') }}</strong>
-                            </span>
-                        @endif
-                        <div class="form-group {{ $errors->has('harga') ? ' has-error' : '' }}">
-			  			<label class="control-label">harga barang</label>	
-			  			<input type="text" name="harga" class="form-control" value="{{ $barang->harga }}"  required>
-			  			@if ($errors->has('harga'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('harga') }}</strong>
-                            </span>
-                        @endif
-                        <div class="form-group {{ $errors->has('stok') ? ' has-error' : '' }}">
-			  			<label class="control-label">stok barang</label>	
-			  			<input type="text" name="stok" class="form-control" value="{{ $barang->stok }}"  required>
-			  			@if ($errors->has('stok'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('stok') }}</strong>
-                            </span>
-                        @endif
-			  		<div class="form-group">
-			  			<button type="submit" class="btn btn-primary">Simpan</button>
-			  		</div>
-			  	</form>
-			  </div>
-			</div>	
-		</div>
-	</div>
-</div>
+<header class="page-header">
+  <div class="d-flex align-items-center">
+    <div class="mr-auto">
+      <h1 class="separator">PRODUK</h1>
+      <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
+      </nav>
+    </div>
+  </div>
+</header>
+<section class="page-content container-fluid">
+  <div class="card-deck m-b-30">
+  <div class="card">
+    <h5 class="card-header">
+      <div class="col-20">
+        <div class="card-body">
+          <a href="javascript:history.go(-1)">
+          <button class="btn btn-warning">
+          Kembali Kehalaman Sebelumnya
+          </button>
+          </a>
+          <h2 class="card-heading">
+            <center>EDIT DATA PRODUK</center>
+          </h2>
+          <div class="modal-footer">
+          </div>
+          <form action="{{ route('barang.update',$barang->id) }}" class="form" method="post" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <input name="_method" type="hidden" value="PATCH">
+            <div class="form-group {{ $errors->has('nama') ? ' has-error' : '' }}">
+              <div class="form-group">
+                <label>NAMA</label>
+                <input value="{{$barang->nama}}" type="text" class="form-control" autocomplete="name" name="nama" required>
+              </div>
+              <div class="form-group {{ $errors->has('id_kategori') ? 'has error' : '' }}">
+                <label class="control-label">Kategori</label>
+                <select name="id_kategori" class="js-selectize">
+                  @foreach($kategori as $data)
+                  <option value="{{ $data->id }}">{{ $selectedkategori == $data->id ? '' : '' }} {{ $data->nama }}</option>
+                  @endforeach
+                </select>
+                @if ($errors->has('kategori'))
+                <span class="help-block">
+                <strong>{{ $errors->first('kategori') }}</strong>
+                </span>
+                @endif
+              </div>
+
+
+              <div class="form-group {{ $errors->has('id_merk') ? 'has error' : '' }}">
+                <label class="control-label">Merk</label>
+                <select name="id_merk" class="js-selectize">
+                  @foreach($merk as $data)
+                  <option value="{{ $data->id }}">{{ $selectedmerk == $data->id ? '' : '' }} {{ $data->nama }}</option>
+                  @endforeach
+                </select>
+                @if ($errors->has('merk'))
+                <span class="help-block">
+                <strong>{{ $errors->first('merk') }}</strong>
+                </span>
+                @endif
+              </div>
+
+
+              <div class="form-group {{ $errors->has('id_jenis') ? 'has error' : '' }}">
+                <label class="control-label">Jenis</label>
+                <select name="id_jenis" class="js-selectize">
+                  @foreach($jenis as $data)
+                  <option value="{{ $data->id }}">{{ $selectedjenis == $data->id ? '' : '' }} {{ $data->nama }}</option>
+                  @endforeach
+                </select>
+                @if ($errors->has('jenis'))
+                <span class="help-block">
+                <strong>{{ $errors->first('jenis') }}</strong>
+                </span>
+                @endif
+              </div>
+
+
+              <div class="form-group {{ $errors->has('deskripsi') ? ' has-error' : '' }}">
+                <label class="control-label">DESKRIPSI</label> 
+                <textarea  placeholder="Masukan Deskripsi" class="form-control" name="deskripsi">{{$barang->deskripsi}}</textarea>
+                @if ($errors->has('deskripsi'))
+                <span class="help-block">
+                <strong>{{ $errors->first('deskripsi') }}</strong>
+                </span>
+                @endif
+              </div>
+              <div class="form-group {{ $errors->has('size') ? ' has-error' : '' }}">
+              <div class="form-group">
+                <label>Size</label>
+                <input value="{{$barang->size}}" type="number" class="form-control" autocomplete="name" name="size" required>
+              </div>
+              <div class="form-group">
+                <label>HARGA</label>
+                <input value="{{$barang->harga}}" type="number" class="form-control" autocomplete="name" name="harga" required>
+              </div>
+              <div class="form-group">
+                <label>STOCK</label>
+                <input value="{{$barang->stok}}" type="number" class="form-control" autocomplete="name" name="stok" required>
+              </div>
+              
+              @if ($errors->has('a'))
+              <span class="help-block">
+              <strong>{{ $errors->first('a') }}</strong>
+              </span>
+              @endif
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">SIMPAN PERUBAHAN</button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </h5>
+    </div>
+  </div>
+</section>
 @endsection

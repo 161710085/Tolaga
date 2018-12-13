@@ -23,5 +23,7 @@ Route::get('/', function () {
 
 
 Auth::routes();
-
+Route::get('guest','FrontEndController@foto_barang');
+Route::get('shop','FrontEndController@shop');
+Route::get('barang/{barang}','FrontEndController@single');
 Route::get('/home', 'HomeController@index')->name('home');

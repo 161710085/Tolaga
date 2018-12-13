@@ -3,7 +3,7 @@
 <header class="page-header">
   <div class="d-flex align-items-center">
     <div class="mr-auto">
-      <h1 class="separator">barang</h1>
+      <h1 class="separator">BARANG</h1>
       <nav class="breadcrumb-wrapper" aria-label="breadcrumb">
       </nav>
     </div>
@@ -14,8 +14,7 @@
     <div class="card">
       <br>
       <h2 class="card-heading">
-        <center>TABEL DATA barang</center>
-        <span class="glyphicon glyphicon-trash"></span>
+        <center>TABEL DATA BARANG</center>
       </h2>
       <h5 class="card-header">
         <div class="col-20">
